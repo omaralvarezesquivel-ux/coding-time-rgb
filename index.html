@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+
+<meta name="theme-color" content="#050509">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Coding Time">
+
+<link rel="manifest" href="manifest.json">
+
+<title>Coding Time</title>
+
+<style>
+*{box-sizing:border-box}
+
+html,body{
+    margin:0;
+    min-height:100%;
+    background:#030305;
+}
+
+body{
+    color:#fff;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Arial,sans-serif;
+    padding:
+      calc(20px + env(safe-area-inset-top))
+      16px
+      calc(28px + env(safe-area-inset-bottom));
+
+    overflow-x:hidden;
+}
+
+/* RGB ambient background */
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:-40%;
+    z-index:-2;
+
+    background:
+      radial-gradient(circle at 20% 20%,rgba(255,0,90,.20),transparent 30%),
+      radial-gradient(circle at 80% 20%,rgba(0,180,255,.20),transparent 30%),
+      radial-gradient(circle at 50% 90%,rgba(120,0,255,.20),transparent 35%);
+
+    animation:rgbBackground 10s linear infinite;
+}
+
+body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    pointer-events:none;
+
+    background:
+      linear-gradient(
+        115deg,
+        transparent 0%,
+        rgba(255,0,100,.05) 25%,
+        rgba(0,255,255,.05) 50%,
+        rgba(130,0,255,.05) 75%,
+        transparent 100%
+      );
+
+    background-size:300% 300%;
+    animation:rgbSweep 7s linear infinite;
+}
+
+@keyframes rgbBackground{
+    0%{transform:rotate(0deg) scale(1)}
+    33%{transform:rotate(120deg) scale(1.15)}
+    66%{transform:rotate(240deg) scale(1.08)}
+    100%{transform:rotate(360deg) scale(1)}
+}
+
+@keyframes rgbSweep{
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+
+.container{
+    max-width:650px;
+    margin:auto;
+}
+
+.header{
+    margin-bottom:18px;
+}
+
+.title{
+    font-size:31px;
+    font-weight:900;
+    letter-spacing:-1.3px;
+
+    background:linear-gradient(
+      90deg,
+      #ff005d,
+      #ff9d00,
+      #fff000,
+      #00ff8c,
+      #00d9ff,
+      #7b00ff,
+      #ff005d
+    );
+
+    background-size:300% auto;
+
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+
+    animation:rgbText 5s linear infinite;
+}
+
+@keyframes rgbText{
+    to{background-position:300% center}
+}
+
+.subtitle{
+    color:#8c93a5;
+    font-size:13px;
+    margin-top:4px;
+}
+
+.status{
+    position:relative;
+    overflow:hidden;
+
+    display:flex;
+    align-items:center;
+    gap:11px;
+
+    background:rgba(10,12,20,.82);
+    border-radius:18px;
+
+    padding:14px 16px;
+    margin-bottom:12px;
+
+    border:1px solid transparent;
+
+    background:
+      linear-gradient(#0a0c14,#0a0c14) padding-box,
+      linear-gradient(
+        90deg,
+        #ff005d,
+        #00eaff,
+        #7b00ff,
+        #ff005d
+      ) border-box;
+
+    background-size:100% 100%,300% 100%;
+    animation:borderRGB 4s linear infinite;
+}
+
+@keyframes borderRGB{
+    to{background-position:100% 100%,300% 100%}
+}
+
+.status-dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+
+    background:#00ff9d;
+
+    box-shadow:
+      0 0 7px #00ff9d,
+      0 0 20px #00ff9d;
+
+    animation:dotPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes dotPulse{
+    50%{transform:scale(1.35);opacity:.65}
+}
+
+.main-button{
+    width:100%;
+    border:0;
+    border-radius:19px;
+
+    padding:19px;
+
+    margin-bottom:18px;
+
+    color:white;
+    background:#0d1019;
+
+    font-size:18px;
+    font-weight:900;
+
+    position:relative;
+    overflow:hidden;
+
+    box-shadow:
+      0 0 15px rgba(0,255,255,.15),
+      inset 0 0 20px rgba(255,0,100,.06);
+
+    border:1px solid transparent;
+
+    background:
+      linear-gradient(#0d1019,#0d1019) padding-box,
+      linear-gradient(
+        90deg,
+        #ff005d,
+        #ff9d00,
+        #00ff8c,
+        #00d9ff,
+        #7b00ff,
+        #ff005d
+      ) border-box;
+
+    background-size:100% 100%,400% 100%;
+
+    animation:borderRGB 4s linear infinite;
+}
+
+.main-button.active{
+    box-shadow:
+      0 0 20px rgba(0,255,150,.45),
+      0 0 55px rgba(0,180,255,.18),
+      inset 0 0 25px rgba(0,255,150,.10);
+}
+
+.section{
+    color:#7e879b;
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:1.7px;
+    margin:21px 3px 9px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.card{
+    position:relative;
+
+    background:rgba(9,12,20,.86);
+
+    border:1px solid #22283a;
+    border-radius:18px;
+
+    padding:15px;
+    min-height:105px;
+
+    overflow:hidden;
+}
+
+.card::before{
+    content:"";
+    position:absolute;
+    left:-100%;
+    top:0;
+
+    width:100%;
+    height:1px;
+
+    background:linear-gradient(
+      90deg,
+      transparent,
+      #ff005d,
+      #00eaff,
+      #7b00ff,
+      transparent
+    );
+
+    animation:cardScan 5s linear infinite;
+}
+
+@keyframes cardScan{
+    to{left:100%}
+}
+
+.wide{
+    grid-column:1/-1;
+}
+
+.label{
+    color:#7f899e;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+.value{
+    margin-top:8px;
+    font-size:24px;
+    font-weight:900;
+    word-break:break-word;
+}
+
+.small{
+    color:#8992a7;
+    font-size:12px;
+    margin-top:5px;
+}
+
+.row{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+
+    padding:12px 0;
+
+    border-bottom:1px solid #1a2130;
+    font-size:14px;
+}
+
+.row:last-child{
+    border-bottom:none;
+}
+
+.good{
+    color:#00ff9d;
+    text-shadow:0 0 10px rgba(0,255,157,.45);
+}
+
+.note{
+    color:#b9c1d1;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.refresh{
+    width:100%;
+
+    border:1px solid transparent;
+
+    background:
+      linear-gradient(#0c1019,#0c1019) padding-box,
+      linear-gradient(
+        90deg,
+        #00d9ff,
+        #7b00ff,
+        #ff005d,
+        #00d9ff
+      ) border-box;
+
+    background-size:100% 100%,300% 100%;
+
+    animation:borderRGB 4s linear infinite;
+
+    color:white;
+
+    border-radius:16px;
+    padding:14px;
+
+    margin-top:12px;
+
+    font-weight:800;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+<div class="title">CODING TIME</div>
+<div class="subtitle">RGB Mobile Command Center</div>
+</div>
+
+<div class="status">
+<div class="status-dot"></div>
+<b id="status">Dashboard Online</b>
+</div>
+
+<button id="mainButton"
+        class="main-button"
+        onclick="toggleCodingTime()">
+CODING TIME: OFF
+</button>
+
+<div class="section">PHONE VITALS</div>
+
+<div class="grid">
+
+<div class="card">
+<div class="label">Battery</div>
+<div class="value" id="battery">—</div>
+<div class="small" id="charging">Checking</div>
+</div>
+
+<div class="card">
+<div class="label">Connection</div>
+<div class="value" id="connection">Checking</div>
+<div class="small" id="network"></div>
+</div>
+
+<div class="card">
+<div class="label">Screen</div>
+<div class="value" id="screen">—</div>
+<div class="small">Viewport</div>
+</div>
+
+<div class="card">
+<div class="label">Pixel Ratio</div>
+<div class="value" id="pixel">—</div>
+<div class="small">Display density</div>
+</div>
+
+<div class="card wide">
+<div class="label">Browser</div>
+<div class="value" id="browser"
+     style="font-size:12px;line-height:1.5">
+—
+</div>
+</div>
+
+</div>
+
+<div class="section">SYSTEM INFORMATION</div>
+
+<div class="card">
+
+<div class="row">
+<span>Platform</span>
+<b id="platform">—</b>
+</div>
+
+<div class="row">
+<span>Language</span>
+<b id="language">—</b>
+</div>
+
+<div class="row">
+<span>Online</span>
+<b id="online" class="good">—</b>
+</div>
+
+<div class="row">
+<span>Orientation</span>
+<b id="orientation">—</b>
+</div>
+
+<div class="row">
+<span>App Uptime</span>
+<b id="uptime">—</b>
+</div>
+
+</div>
+
+<div class="section">DEVICE LIMITATIONS</div>
+
+<div class="card wide">
+<div class="note">
+Safari does not expose protected hardware
+statistics such as exact CPU temperature,
+CPU utilization, RAM utilization, or battery
+health to a normal web app.
+
+This dashboard shows real information that
+the iPhone actually makes available instead
+of inventing readings.
+</div>
+</div>
+
+<button class="refresh" onclick="updateDashboard()">
+REFRESH VITALS
+</button>
+
+</div>
+
+<script>
+
+let startTime=Date.now();
+let codingTime=false;
+
+function toggleCodingTime(){
+
+    codingTime=!codingTime;
+
+    const button=document.getElementById("mainButton");
+    const status=document.getElementById("status");
+
+    if(codingTime){
+
+        button.textContent="CODING TIME: ON";
+        button.classList.add("active");
+        status.textContent="Coding Time Active";
+
+    }else{
+
+        button.textContent="CODING TIME: OFF";
+        button.classList.remove("active");
+        status.textContent="Dashboard Online";
+
+    }
+}
+
+function updateDashboard(){
+
+    document.getElementById("screen").textContent=
+        window.innerWidth+" × "+window.innerHeight;
+
+    document.getElementById("pixel").textContent=
+        window.devicePixelRatio+"×";
+
+    document.getElementById("platform").textContent=
+        navigator.platform||"Not exposed";
+
+    document.getElementById("language").textContent=
+        navigator.language||"Unknown";
+
+    document.getElementById("online").textContent=
+        navigator.onLine?"YES":"NO";
+
+    document.getElementById("browser").textContent=
+        navigator.userAgent;
+
+    if(screen.orientation){
+
+        document.getElementById("orientation").textContent=
+            screen.orientation.type;
+
+    }
+
+    if(navigator.connection){
+
+        document.getElementById("connection").textContent=
+            navigator.connection.effectiveType||"Connected";
+
+        let text="";
+
+        if(navigator.connection.downlink){
+            text+=navigator.connection.downlink+" Mbps";
+        }
+
+        if(navigator.connection.rtt){
+            text+=" • "+navigator.connection.rtt+" ms RTT";
+        }
+
+        document.getElementById("network").textContent=text;
+
+    }else{
+
+        document.getElementById("connection").textContent=
+            navigator.onLine?"ONLINE":"OFFLINE";
+
+        document.getElementById("network").textContent=
+            "Network details unavailable";
+    }
+
+    const seconds=
+        Math.floor((Date.now()-startTime)/1000);
+
+    const minutes=Math.floor(seconds/60);
+    const remaining=seconds%60;
+
+    document.getElementById("uptime").textContent=
+        minutes+"m "+remaining+"s";
+}
+
+async function getBattery(){
+
+    if(!navigator.getBattery){
+
+        document.getElementById("battery").textContent=
+            "Unavailable";
+
+        document.getElementById("charging").textContent=
+            "Safari limitation";
+
+        return;
+    }
+
+    try{
+
+        const battery=await navigator.getBattery();
+
+        function updateBattery(){
+
+            document.getElementById("battery").textContent=
+                Math.round(battery.level*100)+"%";
+
+            document.getElementById("charging").textContent=
+                battery.charging?"Charging":"Not charging";
+        }
+
+        battery.addEventListener(
+            "levelchange",
+            updateBattery
+        );
+
+        battery.addEventListener(
+            "chargingchange",
+            updateBattery
+        );
+
+        updateBattery();
+
+    }catch(e){
+
+        document.getElementById("battery").textContent=
+            "Unavailable";
+    }
+}
+
+window.addEventListener("online",updateDashboard);
+window.addEventListener("offline",updateDashboard);
+window.addEventListener("resize",updateDashboard);
+
+updateDashboard();
+getBattery();
+
+setInterval(updateDashboard,1000);
+
+</script>
+
+</body>
+</html>

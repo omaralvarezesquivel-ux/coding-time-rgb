@@ -1,0 +1,11 @@
+{
+  "name": "Coding Time RGB",
+  "short_name": "Coding Time",
+  "description": "RGB Coding Time mobile command center",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#030305",
+  "theme_color": "#030305",
+  "orientation": "portrait"
+}
